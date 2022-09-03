@@ -32,6 +32,14 @@ body {
   }
 
   .active {
-    color: #fff;
+    color: green;
+  }
+
+  .correct {
+    color: #FFF;
+  }
+
+  .incorrect {
+    color: red;
   }
 }

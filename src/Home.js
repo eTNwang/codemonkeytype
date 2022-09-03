@@ -36,9 +36,7 @@ const Home = () => {
     } else {
       setCurrCharIndex(currCharIndex + 1)
     }
-
-  }
-  )
+  })
 
   return (
     <>
@@ -51,10 +49,25 @@ const Home = () => {
           return (
             <div key={lineIndex}>
               {line.split("").map((char, charIndex) => {
+                console.log(lineIndex, currLineIndex)
                 return (
                   <span
-                    className={lineIndex === currLineIndex && charIndex === currCharIndex ? "active" : "inactive"}
-                    key={[lineIndex, charIndex]}
+                    className={
+                      // Add active selector to active char
+                      lineIndex === currLineIndex && charIndex === currCharIndex ? "active" : ""
+                        + " " +
+                        // Handle previous lines
+                        (lineIndex < currLineIndex
+                          ? isCharacterCorrect[lineIndex][charIndex] ? "correct" : "incorrect"
+                          : ""
+                        )
+                        + " " +
+                        // Handle current line
+                        (lineIndex === currLineIndex && charIndex < currCharIndex
+                          ? isCharacterCorrect[lineIndex][charIndex] ? "correct" : "incorrect"
+                          : "")
+                    }
+                    key={lineIndex + "-" + charIndex}
                   >
                     {char}
                   </span>
