@@ -1,22 +1,59 @@
 // define the time limit
 let TIME_LIMIT = 60;
  
-// define quotes to be used
-let quotes_array = [
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-];
+const {readFileSync, promises: fsPromises} = require('fs');
+
+function syncReadFile(filename) {
+
+  const contents = readFileSync(filename, 'utf-8');
+
+  var problems = []
+
+  const arr = contents.split("####");
+  console.log(arr[0])
+  console.log(arr[1])
+  console.log(arr[2])
+
+
+  function addtoproblems(input){
+    var inputarr = input.split(/\r?\n/)
+    let title = inputarr.shift();
+    title  = title.replace("-", " ")
+    title = title.replace(".py","")
+
+    let probobj = {name: title, text: inputarr }
+    problems.push(probobj)
+
+  }
+  arr.forEach((x, i) => addtoproblems(x));
+  console.log(problems[0].name)
+  console.log(problems[1].name)
+  console.log(problems[2].name)
+
+  console.log(problems[0].text)
+  console.log(problems[1].text)
+  console.log(problems[2].text)
+
+
+  return problems;
+}
+
+syncReadFile('/Users/AmyEric/Desktop/codemonkeytype/src/problems.txt');
+
+
+
 
 
 //temp params
 
 //given text
-let quote_text = document.querySelector(".quote");
-//given input
-let input_area = document.querySelector(".input_area");
-//errornum tracker
-let error_text = document.querySelector(".curr_errors");
-//accuracy tracker
-let accuracy_text = document.querySelector(".curr_accuracy");
+// let quote_text = document.querySelector(".quote");
+// //given input
+// let input_area = document.querySelector(".input_area");
+// //errornum tracker
+// let error_text = document.querySelector(".curr_errors");
+// //accuracy tracker
+// let accuracy_text = document.querySelector(".curr_accuracy");
 
 
 
