@@ -1,4 +1,9 @@
 // define the time limit
+
+// Array of objects
+// Object has name and text field
+// Text is an array of strings, each representing a line
+
 let TIME_LIMIT = 60;
  
 const {readFileSync, promises: fsPromises} = require('fs');
