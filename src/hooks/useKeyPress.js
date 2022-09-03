@@ -5,7 +5,7 @@ const useKeyPress = callback => {
 
   useEffect(() => {
     const downHandler = ({ key }) => {
-      if (keyPressed !== key && key.length === 1) {
+      if (keyPressed !== key && key.length === 1 || key === "Backspace") {
         setKeyPressed(key)
         callback && callback(key)
       }

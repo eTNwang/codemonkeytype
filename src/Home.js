@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import useKeyPress from "./hooks/useKeyPress"
 
 // Each solution is stored as an array of strings, with each string representing one line of the solution
-const lineList = ["ab cde fffg", "fgh", "i jklm"]
+const lineList = ["prevMap = {}", "for i, n in enumerate(nums):", "if diff in prevMap:", "return [prevMap[diff], i]", "prevMap[n] = i"]
 
 const initialState = []
 
@@ -19,22 +19,39 @@ const Home = () => {
   // To access characters, use lineList[line #][character #]
 
   useKeyPress(key => {
-    if (key === lineList[currLineIndex][currCharIndex]) {
+    // Backspace handler
+    if (key === "Backspace") {
       setIsCharacterCorrect(isCharacterCorrect.map(
-        (line, index) => index === currLineIndex ? line.concat(true) : line)
+        (line, index) => index === currLineIndex ? line.slice(0, -1) : line)
       )
-    } else {
-      setIsCharacterCorrect(isCharacterCorrect.map(
-        (line, index) => index === currLineIndex ? line.concat(false) : line)
-      )
-    }
+      if (currCharIndex === 0) {
+        setCurrLineIndex(currLineIndex - 1)
+        setCurrCharIndex(lineList[currLineIndex - 1].length - 1)
+        setIsCharacterCorrect(isCharacterCorrect.map(
+          (line, index) => index === currLineIndex - 1 ? line.slice(0, -1) : line))
+      } else {
+        setCurrCharIndex(currCharIndex - 1)
+      }
 
-    // Increment line if last character
-    if (currCharIndex === lineList[currLineIndex].length - 1) {
-      setCurrLineIndex(currLineIndex + 1)
-      setCurrCharIndex(0)
+      // Other key handler
     } else {
-      setCurrCharIndex(currCharIndex + 1)
+      if (key === lineList[currLineIndex][currCharIndex]) {
+        setIsCharacterCorrect(isCharacterCorrect.map(
+          (line, index) => index === currLineIndex ? line.concat(true) : line)
+        )
+      } else {
+        setIsCharacterCorrect(isCharacterCorrect.map(
+          (line, index) => index === currLineIndex ? line.concat(false) : line)
+        )
+      }
+
+      // Increment line if last character
+      if (currCharIndex === lineList[currLineIndex].length - 1) {
+        setCurrLineIndex(currLineIndex + 1)
+        setCurrCharIndex(0)
+      } else {
+        setCurrCharIndex(currCharIndex + 1)
+      }
     }
   })
 
@@ -49,7 +66,6 @@ const Home = () => {
           return (
             <div key={lineIndex}>
               {line.split("").map((char, charIndex) => {
-                console.log(lineIndex, currLineIndex)
                 return (
                   <span
                     className={
