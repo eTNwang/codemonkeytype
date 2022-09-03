@@ -172,7 +172,9 @@ const Home = () => {
       </div>
       <h2>{victory}</h2>
       {victory
-        ? <h3>Accuracy: {(totalChars - mistakes) / totalChars}</h3>
+        ? <div>
+          <h3>Speed: {totalChars / 5 / currTime * 60} WPM</h3>
+          <h3>Accuracy: {Math.round((totalChars - mistakes) / totalChars * 10000) / 100} %</h3></div>
         : null}
     </>
   )
