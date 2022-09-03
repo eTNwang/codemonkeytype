@@ -2,6 +2,32 @@ import React, { useState, useEffect } from "react"
 
 import useKeyPress from "./hooks/useKeyPress"
 
+
+
+const {readFileSync, promises: fsPromises} = require('fs');
+
+function syncReadFile(filename) {
+
+  const contents = readFileSync(filename, 'utf-8');
+
+  var problems = []
+
+  const arr = contents.split("####");
+  function addtoproblems(input){
+    var inputarr = input.split(/\r?\n/)
+    let title = inputarr.shift();
+    title  = title.replace("-", " ")
+    title = title.replace(".py","")
+
+    let probobj = {name: title, text: inputarr }
+    problems.push(probobj)
+
+  }
+  arr.forEach((x, i) => addtoproblems(x));
+  return problems;
+}
+
+
 // Each solution is stored as an array of strings, with each string representing one line of the solution
 const lineList = ["prevMap = {}", "for i, n in enumerate(nums):", "if diff in prevMap:", "return [prevMap[diff], i]", "prevMap[n] = i"]
 const problemTitle = "TwoSum"
