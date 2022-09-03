@@ -197,7 +197,6 @@ function finishGame() {
    
     // calculate cpm and wpm
     cpm = Math.round(((characterTyped / timeElapsed) * 60));
-    wpm = Math.round((((characterTyped / 5) / timeElapsed) * 60));
    
     // update cpm and wpm text
     // display the cpm and wpm

@@ -1,4 +1,6 @@
 import React, { useState } from "react"
+import React, { useEffect } from "react"
+
 import useKeyPress from "./hooks/useKeyPress"
 
 // Each solution is stored as an array of strings, with each string representing one line of the solution
@@ -17,6 +19,20 @@ const Home = () => {
   const [victory, setVictory] = useState("")
   const [currLineIndex, setCurrLineIndex] = useState(0)
   const [currCharIndex, setCurrCharIndex] = useState(0)
+  const [currErrors, setErrors] = useState(0)
+  const [currLetters, setLetters] = useState(0)
+  const [currTime, setTime] = useState(0)
+  const [ticking, setTicking] = useState(false)
+
+
+
+  useEffect(() => {
+    const timer = setTimeout(() => ticking && setTime(count+1), 1e3)
+    return () => clearTimeout(timer)
+   }, [currTime, ticking])
+
+
+  
 
   // To access characters, use lineList[line #][character #]
 
@@ -25,6 +41,12 @@ const Home = () => {
     if (currLineIndex >= lineList.length) {
       return
     }
+    
+    if (ticking ==  false){
+      ticking = !ticking
+    }
+
+
 
     // Backspace handler
     if (key === "Backspace") {
