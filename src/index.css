@@ -25,4 +25,5 @@ body {
 
 .text-to-type {
   font-size: 24px;
+  opacity: 0.5;
 }
