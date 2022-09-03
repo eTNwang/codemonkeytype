@@ -24,12 +24,14 @@ body {
 }
 
 .test {
-  display: flex;
-  flex-wrap: wrap;
   user-select: none;
 
   span {
     font-size: 24px;
-    opacity: 0.5;
+    color: #81827F;
+  }
+
+  .active {
+    color: #fff;
   }
 }
