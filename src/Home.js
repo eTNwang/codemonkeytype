@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react"
 
 import useKeyPress from "./hooks/useKeyPress"
 
-
-
 const {readFileSync, promises: fsPromises} = require('fs');
 
 function syncReadFile(filename) {
@@ -115,6 +113,7 @@ const Home = () => {
 
         // Win condition
         if (currLineIndex >= lineList.length - 1) {
+          setTicking(false)
           setVictory("Victory!")
           setCurrLineIndex(999)
 
@@ -131,7 +130,7 @@ const Home = () => {
 
   return (
     <>
-      <h1>MonkeyCode</h1>
+      <h1>MonkeyCode 🍌</h1>
 
       <h2>{problemTitle}</h2>
 
@@ -172,8 +171,8 @@ const Home = () => {
       </div>
       <h2>{victory}</h2>
       {victory
-        ? <div>
-          <h3>Speed: {totalChars / 5 / currTime * 60} WPM</h3>
+        ? <div className="results">
+          <h3>Speed: {Math.round(totalChars / 5 / currTime * 6000) / 100} WPM</h3>
           <h3>Accuracy: {Math.round((totalChars - mistakes) / totalChars * 10000) / 100} %</h3></div>
         : null}
     </>
