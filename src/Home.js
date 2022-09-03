@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react"
+import Select, { NonceProvider } from "react-select"
 
 import useKeyPress from "./hooks/useKeyPress"
 
@@ -53,6 +54,7 @@ const Home = () => {
   const [currCharIndex, setCurrCharIndex] = useState(0)
   const [currTime, setTime] = useState(0)
   const [ticking, setTicking] = useState(false)
+  const [currLanguage, setCurrLanguage] = useState({ value: 'Python', label: 'Python' })
 
 
 
@@ -126,13 +128,58 @@ const Home = () => {
         setCurrCharIndex(currCharIndex + 1)
       }
     }
-  })
+  });
+
+  const languageOptions = [
+    { value: 'Python', label: 'Python' },
+    { value: 'C++', label: 'C++'},
+    { value: 'Java', label: 'Java' },
+  ]
+
+  const customStyles = {
+    option: (provided, state) => ({
+      ...provided,
+      background: '#323437',
+      color: state.isSelected ? '#e2b714' : '#d1d0c5',
+      padding: 20,
+    }),
+    menu: (provided, state) => ({
+      ...provided,
+      background: '#323437',
+    }),
+    control: (provided, state) => ({
+      ...provided,
+      background: '#323437',
+      width: "200px",
+      boxShadow: 0,
+      borderColor: state.isFocused
+        ? '#e2b714' : '#d1d0c5',
+      '&:hover': {
+        borderColor: state.isFocused
+          ? '#e2b714' : '#d1d0c5',
+      }
+    }),
+    singleValue: (provided, state) => {
+      const opacity = state.isDisabled ? 0.5 : 1;
+      const transition = 'opacity 300ms';
+  
+      return { ...provided, opacity, transition, color: '#e2b714' };
+    }
+  }
 
   return (
     <>
       <h1>MonkeyCode 🍌</h1>
 
       <h2>{problemTitle}</h2>
+
+      <Select 
+        value = { currLanguage }
+        options = { languageOptions }
+        onChange = { setCurrLanguage }
+        isSearchable = { false }
+        styles = { customStyles }
+      />
 
       {/* Map list of lines out to individual characters */}
 
