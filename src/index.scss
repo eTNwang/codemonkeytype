@@ -35,3 +35,15 @@ body {
     color: #fff;
   }
 }
+
+#caret {
+  position: absolute;
+  left: 5px;
+  transition: left 5s linear;
+  height: 40px;
+  width: 2px;
+  background: #0a0a0a;
+}
+#caret.endOfLine {
+  left: 95%;
+}

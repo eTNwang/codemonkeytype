@@ -10,11 +10,6 @@ function syncReadFile(filename) {
   var problems = []
 
   const arr = contents.split("####");
-  console.log(arr[0])
-  console.log(arr[1])
-  console.log(arr[2])
-
-
   function addtoproblems(input){
     var inputarr = input.split(/\r?\n/)
     let title = inputarr.shift();
@@ -26,19 +21,9 @@ function syncReadFile(filename) {
 
   }
   arr.forEach((x, i) => addtoproblems(x));
-  console.log(problems[0].name)
-  console.log(problems[1].name)
-  console.log(problems[2].name)
-
-  console.log(problems[0].text)
-  console.log(problems[1].text)
-  console.log(problems[2].text)
-
-
   return problems;
 }
 
-syncReadFile('/Users/AmyEric/Desktop/codemonkeytype/src/problems.txt');
 
 
 
