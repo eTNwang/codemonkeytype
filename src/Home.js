@@ -11,9 +11,18 @@ for (let i = 0; i < lineList.length; i++) {
   initialState.push([])
 }
 
+let totalChars = 0
+
+for (let i = 0; i < lineList.length; i++) {
+  for (let j = 0; j < lineList[i].length; j++) {
+    totalChars++
+  }
+}
+
 const Home = () => {
   // Store an array of booleans depending on if the character was typed correctly
   const [isCharacterCorrect, setIsCharacterCorrect] = useState(initialState)
+  const [mistakes, setMistakes] = useState(0)
   const [victory, setVictory] = useState("")
   const [currLineIndex, setCurrLineIndex] = useState(0)
   const [currCharIndex, setCurrCharIndex] = useState(0)
@@ -21,7 +30,7 @@ const Home = () => {
   // To access characters, use lineList[line #][character #]
 
   useKeyPress(key => {
-    
+
     if (currLineIndex >= lineList.length) {
       return
     }
@@ -31,6 +40,9 @@ const Home = () => {
       setIsCharacterCorrect(isCharacterCorrect.map(
         (line, index) => index === currLineIndex ? line.slice(0, -1) : line)
       )
+      if (currCharIndex === 0 && currLineIndex === 0) {
+        return
+      }
       // Decrement line if first char
       if (currCharIndex === 0) {
         setCurrLineIndex(currLineIndex - 1)
@@ -41,7 +53,7 @@ const Home = () => {
         setCurrCharIndex(currCharIndex - 1)
       }
 
-    // Valid key handler
+      // Valid key handler
     } else {
       if (key === lineList[currLineIndex][currCharIndex]) {
         setIsCharacterCorrect(isCharacterCorrect.map(
@@ -51,6 +63,7 @@ const Home = () => {
         setIsCharacterCorrect(isCharacterCorrect.map(
           (line, index) => index === currLineIndex ? line.concat(false) : line)
         )
+        setMistakes(mistakes + 1)
       }
 
       // Increment line if last char
@@ -61,7 +74,7 @@ const Home = () => {
           setVictory("Victory!")
           setCurrLineIndex(999)
 
-        // Haven't won yet condition
+          // Haven't won yet condition
         } else {
           setCurrLineIndex(currLineIndex + 1)
           setCurrCharIndex(0)
@@ -113,6 +126,7 @@ const Home = () => {
         })}
       </div>
       <h2>{victory}</h2>
+      {victory ? <h3>Accuracy: {(totalChars - mistakes) / totalChars}</h3> : null}
     </>
   )
 }
