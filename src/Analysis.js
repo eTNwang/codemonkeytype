@@ -2,7 +2,7 @@
 let TIME = 60;
  
 // define quotes to be used
-let curr_Text = [
+let quotes_array = [
   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 ];
 
@@ -14,11 +14,9 @@ let curr_Text = [
  
 // selecting required elements w/ querySelector
 // let timer_text = document.querySelector(".curr_time");
-// let accuracy_text = document.querySelector(".curr_accuracy");
 // let error_text = document.querySelector(".curr_errors");
 // let cpm_text = document.querySelector(".curr_cpm");
 // let wpm_text = document.querySelector(".curr_wpm");
-// let quote_text = document.querySelector(".quote");
 // let input_area = document.querySelector(".input_area");
 // let restart_btn = document.querySelector(".restart_btn");
 // let cpm_group = document.querySelector(".cpm");
@@ -26,6 +24,22 @@ let curr_Text = [
 // let error_group = document.querySelector(".errors");
 // let accuracy_group = document.querySelector(".accuracy");
  
+
+//given text
+let quote_text = document.querySelector(".quote");
+
+//given input
+let input_area = document.querySelector(".input_area");
+
+//errornum tracker
+let error_text = document.querySelector(".curr_errors");
+
+//accuracy tracker
+let accuracy_text = document.querySelector(".curr_accuracy");
+
+
+
+
 
 let timeLeft = TIME_LIMIT;
 let timeElapsed = 0;
@@ -172,17 +186,7 @@ function updateQuote() {
 
 
 function finishGame() {
-    // stop the timer
-    clearInterval(timer);
-   
-    // disable the input area
-    input_area.disabled = true;
-   
-    // show finishing text
-    quote_text.textContent = "Click on restart to start a new game.";
-   
-    // display restart button
-    restart_btn.style.display = "block";
+  
    
     // calculate cpm and wpm
     cpm = Math.round(((characterTyped / timeElapsed) * 60));
@@ -195,4 +199,11 @@ function finishGame() {
     // display the cpm and wpm
     cpm_group.style.display = "block";
     wpm_group.style.display = "block";
+
+
+      // // stop the timer
+      // // disable the input area
+      // // show finishing text
+      // // display restart button
+
   }
