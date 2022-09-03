@@ -3,7 +3,7 @@ import Select, { NonceProvider } from "react-select"
 
 import useKeyPress from "./hooks/useKeyPress"
 
-const {readFileSync, promises: fsPromises} = require('fs');
+const { readFileSync, promises: fsPromises } = require('fs');
 
 function syncReadFile(filename) {
 
@@ -12,13 +12,13 @@ function syncReadFile(filename) {
   var problems = []
 
   const arr = contents.split("####");
-  function addtoproblems(input){
+  function addtoproblems(input) {
     var inputarr = input.split(/\r?\n/)
     let title = inputarr.shift();
-    title  = title.replace("-", " ")
-    title = title.replace(".py","")
+    title = title.replace("-", " ")
+    title = title.replace(".py", "")
 
-    let probobj = {name: title, text: inputarr }
+    let probobj = { name: title, text: inputarr }
     problems.push(probobj)
 
   }
@@ -216,11 +216,15 @@ const Home = () => {
           )
         })}
       </div>
-      <h2>{victory}</h2>
-      {victory
-        ? <div className="results">
-          <h3>Speed: {Math.round(totalChars / 5 / currTime * 6000) / 100} WPM</h3>
-          <h3>Accuracy: {Math.round((totalChars - mistakes) / totalChars * 10000) / 100} %</h3></div>
+      {victory ?
+        <>
+          <div className="results-cover" />
+          <div className="results">
+            <h2>{victory}</h2>
+            <h3>Speed: {Math.round(totalChars / 5 / currTime * 60)} WPM</h3>
+            <h3>Accuracy: {Math.round((totalChars - mistakes) / totalChars * 10000) / 100} %</h3>
+          </div>
+        </>
         : null}
     </>
   )
