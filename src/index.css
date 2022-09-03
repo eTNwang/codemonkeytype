@@ -22,3 +22,7 @@ body {
   padding: 2rem;
   font-family: 'Roboto Mono', monospace;
 }
+
+.text-to-type {
+  font-size: 24px;
+}

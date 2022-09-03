@@ -1,9 +1,19 @@
+import {
+  BrowserRouter as Router,
+  Routes, Route, Link
+} from "react-router-dom"
+
+import Home from "./Home"
+import About from "./About"
+
 const App = () => {
   return (
-    <>
-      <h1>Code Monkey Type</h1>
-      <p>type a bunch of words here this is where the sentences go</p>
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+      </Routes>
+    </Router>
   )
 }
 
