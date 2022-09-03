@@ -1,5 +1,4 @@
-import React, { useState } from "react"
-import React, { useEffect } from "react"
+import React, { useState, useEffect } from "react"
 
 import useKeyPress from "./hooks/useKeyPress"
 
@@ -28,34 +27,31 @@ const Home = () => {
   const [victory, setVictory] = useState("")
   const [currLineIndex, setCurrLineIndex] = useState(0)
   const [currCharIndex, setCurrCharIndex] = useState(0)
-  const [currErrors, setErrors] = useState(0)
-  const [currLetters, setLetters] = useState(0)
   const [currTime, setTime] = useState(0)
   const [ticking, setTicking] = useState(false)
 
 
 
   useEffect(() => {
-    const timer = setTimeout(() => ticking && setTime(count+1), 1e3)
+    const timer = setTimeout(() => ticking && setTime(currTime + 1), 1000)
     return () => clearTimeout(timer)
-   }, [currTime, ticking])
+  }, [currTime, ticking])
 
-
-  
 
   // To access characters, use lineList[line #][character #]
 
   useKeyPress(key => {
 
+    if (currLineIndex === 999) {
+      setTicking(false)
+      return
+    }
+
+    setTicking(true)
+
     if (currLineIndex >= lineList.length) {
       return
     }
-    
-    if (ticking ==  false){
-      ticking = !ticking
-    }
-
-
 
     // Backspace handler
     if (key === "Backspace") {
@@ -115,6 +111,7 @@ const Home = () => {
 
       {/* Map list of lines out to individual characters */}
 
+      <p className="timer">{currTime}</p>
       <div className="test">
         {lineList.map((line, lineIndex) => {
           return (
@@ -148,7 +145,9 @@ const Home = () => {
         })}
       </div>
       <h2>{victory}</h2>
-      {victory ? <h3>Accuracy: {(totalChars - mistakes) / totalChars}</h3> : null}
+      {victory
+        ? <h3>Accuracy: {(totalChars - mistakes) / totalChars}</h3>
+        : null}
     </>
   )
 }
