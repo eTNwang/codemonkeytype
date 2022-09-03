@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins&family=Roboto+Mono&display=swap');
 
 :root {
   --bg-color: #323437;
@@ -21,6 +21,10 @@ body {
   color: var(--text-color);
   padding: 2rem;
   font-family: 'Roboto Mono', monospace;
+}
+
+h1 {
+  font-family: 'Poppins';
 }
 
 .test {
