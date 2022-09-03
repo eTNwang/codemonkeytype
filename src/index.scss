@@ -23,6 +23,13 @@ body {
   font-family: 'Roboto Mono', monospace;
 }
 
-.text-to-type {
-  font-size: 24px;
+.test {
+  display: flex;
+  flex-wrap: wrap;
+  user-select: none;
+
+  span {
+    font-size: 24px;
+    opacity: 0.5;
+  }
 }
