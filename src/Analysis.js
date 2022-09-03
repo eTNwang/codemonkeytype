@@ -1,5 +1,5 @@
 // define the time limit
-let TIME = 60;
+let TIME_LIMIT = 60;
  
 // define quotes to be used
 let quotes_array = [
@@ -7,33 +7,14 @@ let quotes_array = [
 ];
 
 
-
-//need to strip solutions into subarrays by line
-
-//CRITICAL CRITICAL
- 
-// selecting required elements w/ querySelector
-// let timer_text = document.querySelector(".curr_time");
-// let error_text = document.querySelector(".curr_errors");
-// let cpm_text = document.querySelector(".curr_cpm");
-// let wpm_text = document.querySelector(".curr_wpm");
-// let input_area = document.querySelector(".input_area");
-// let restart_btn = document.querySelector(".restart_btn");
-// let cpm_group = document.querySelector(".cpm");
-// let wpm_group = document.querySelector(".wpm");
-// let error_group = document.querySelector(".errors");
-// let accuracy_group = document.querySelector(".accuracy");
- 
+//temp params
 
 //given text
 let quote_text = document.querySelector(".quote");
-
 //given input
 let input_area = document.querySelector(".input_area");
-
 //errornum tracker
 let error_text = document.querySelector(".curr_errors");
-
 //accuracy tracker
 let accuracy_text = document.querySelector(".curr_accuracy");
 
@@ -41,7 +22,7 @@ let accuracy_text = document.querySelector(".curr_accuracy");
 
 
 
-let timeLeft = TIME_LIMIT;
+let timeLeft = 30;
 let timeElapsed = 0;
 let total_errors = 0;
 let errors = 0;
@@ -51,10 +32,26 @@ let current_quote = "";
 let quoteNo = 0;
 let timer = null;
 
+let curr_input = ""
+let curr_input_array = ""
+let quoteSpanArray = ""
+
+let cpm = 0
+let wpm = 0
+
+
+
 
 
 function parseSolution(text){
     return text.split('\n')
+}
+
+
+//customize func later
+function usersubmiut(timer){
+    TIME_LIMIT = timer
+
 }
 
 function updateQuote() {
@@ -76,6 +73,8 @@ function updateQuote() {
       quoteNo = 0;
   }
 
+
+  //invoked on text change
   function processCurrentText() {
  
     // get current input text and split it
@@ -112,15 +111,10 @@ function updateQuote() {
     });
    
     // display the number of errors
-    error_text.textContent = total_errors + errors;
    
     // update accuracy text
-    let correctCharacters = (characterTyped - (total_errors + errors));
-    let accuracyVal = ((correctCharacters / characterTyped) * 100);
-    accuracy_text.textContent = Math.round(accuracyVal);
+    let accuracyVal = (((characterTyped - (total_errors + errors)) / characterTyped) * 100);
    
-    // if current text is completely typed
-    // irrespective of errors
     if (curr_input.length == current_quote.length) {
       updateQuote();
    
@@ -151,38 +145,24 @@ function updateQuote() {
     accuracy = 0;
     characterTyped = 0;
     quoteNo = 0;
-    input_area.disabled = false;
-   
-    input_area.value = "";
-    quote_text.textContent = 'Click on the area below to start the game.';
-    accuracy_text.textContent = 100;
-    timer_text.textContent = timeLeft + 's';
-    error_text.textContent = 0;
-    restart_btn.style.display = "none";
-    cpm_group.style.display = "none";
-    wpm_group.style.display = "none";
+  
   }
 
 
 
   function updateTimer() {
     if (timeLeft > 0) {
-      // decrease the current time left
       timeLeft--;
-   
-      // increase the time elapsed
       timeElapsed++;
    
-      // update the timer text
-      timer_text.textContent = timeLeft + "s";
+      // update the timer text as well
+
     }
     else {
       // finish the game
       finishGame();
     }
   }
-
-
 
 
 function finishGame() {
@@ -193,17 +173,10 @@ function finishGame() {
     wpm = Math.round((((characterTyped / 5) / timeElapsed) * 60));
    
     // update cpm and wpm text
-    cpm_text.textContent = cpm;
-    wpm_text.textContent = wpm;
-   
     // display the cpm and wpm
-    cpm_group.style.display = "block";
-    wpm_group.style.display = "block";
-
-
-      // // stop the timer
-      // // disable the input area
-      // // show finishing text
-      // // display restart button
+    // // stop the timer
+    // // disable the input area
+    // // show finishing text
+    // // display restart button
 
   }
