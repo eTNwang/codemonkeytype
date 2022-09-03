@@ -2,11 +2,17 @@ import React, { useState } from "react"
 import useKeyPress from "./hooks/useKeyPress"
 
 // Each solution is stored as an array of strings, with each string representing one line of the solution
-const lineList = ["ab cde", "fgh", "i jklm"]
+const lineList = ["ab cde fffg", "fgh", "i jklm"]
+
+const initialState = []
+
+for (let i = 0; i < lineList.length; i++) {
+  initialState.push([])
+}
 
 const Home = () => {
   // Store an array of booleans depending on if the character was typed correctly
-  const [isCharacterCorrect, setIsCharacterCorrect] = useState([])
+  const [isCharacterCorrect, setIsCharacterCorrect] = useState(initialState)
   const [currLineIndex, setCurrLineIndex] = useState(0)
   const [currCharIndex, setCurrCharIndex] = useState(0)
 
@@ -14,20 +20,23 @@ const Home = () => {
 
   useKeyPress(key => {
     if (key === lineList[currLineIndex][currCharIndex]) {
-      setIsCharacterCorrect(isCharacterCorrect.concat(true))
+      setIsCharacterCorrect(isCharacterCorrect.map(
+        (line, index) => index === currLineIndex ? line.concat(true) : line)
+      )
     } else {
-      setIsCharacterCorrect(isCharacterCorrect.concat(false))
+      setIsCharacterCorrect(isCharacterCorrect.map(
+        (line, index) => index === currLineIndex ? line.concat(false) : line)
+      )
     }
 
     // Increment line if last character
     if (currCharIndex === lineList[currLineIndex].length - 1) {
-      // setIsCharacterCorrect(isCharacterCorrect.concat([]))
       setCurrLineIndex(currLineIndex + 1)
       setCurrCharIndex(0)
     } else {
       setCurrCharIndex(currCharIndex + 1)
     }
-    
+
   }
   )
 
