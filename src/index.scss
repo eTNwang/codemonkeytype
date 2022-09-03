@@ -36,7 +36,8 @@ h1 {
   }
 
   .active {
-    color: green;
+    margin-left: -3px;
+    border-left: 3px solid #E2B712;
   }
 
   .correct {
