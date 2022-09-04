@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import useKeyPress from "./hooks/useKeyPress"
 import text from "./text.js";
+import Select, { NonceProvider } from "react-select"
 
 function syncReadFile() {
 
@@ -11,10 +12,10 @@ function syncReadFile() {
   function addtoproblems(input){
     var inputarr = input.split(/\r?\n/)
     let title = inputarr.shift();
-    title  = title.replace("-", " ")
-    title = title.replace(".py","")
+    title = title.replace("-", " ")
+    title = title.replace(".py", "")
 
-    let probobj = {name: title, text: inputarr }
+    let probobj = { name: title, text: inputarr }
     problems.push(probobj)
 
   }
@@ -41,6 +42,7 @@ const Home = () => {
   const [currProblem, setProblem] = useState(syncReadFile())
   const [currTitle, setTitle] = useState(currProblem[0].name)
   const [currText, setText] = useState(currProblem[0].text)
+  const [currLanguage, setCurrLanguage] = useState({ value: 'Python', label: 'Python' })
 
 
 for (let i = 0; i < currProblem.length; i++) {
@@ -62,7 +64,6 @@ for (let i = 0; i < currProblem.length; i++) {
   }, [currTime, ticking])
 
 
-  // To access characters, use lineList[line #][character #]
 
   useKeyPress(key => {
 
@@ -112,7 +113,8 @@ for (let i = 0; i < currProblem.length; i++) {
       if (currCharIndex === currText[currLineIndex].length - 1) {
 
         // Win condition
-        if (currLineIndex >= currText.length - 1) {
+        if (currLineIndex >= currProblem.length - 1) {
+          setTicking(false)
           setVictory("Victory!")
           setCurrLineIndex(999)
           
@@ -132,13 +134,58 @@ for (let i = 0; i < currProblem.length; i++) {
         setCurrCharIndex(currCharIndex + 1)
       }
     }
-  })
+  });
+
+  const languageOptions = [
+    { value: 'Python', label: 'Python' },
+    { value: 'C++', label: 'C++'},
+    { value: 'Java', label: 'Java' },
+  ]
+
+  const customStyles = {
+    option: (provided, state) => ({
+      ...provided,
+      background: '#323437',
+      color: state.isSelected ? '#e2b714' : '#d1d0c5',
+      padding: 20,
+    }),
+    menu: (provided, state) => ({
+      ...provided,
+      background: '#323437',
+    }),
+    control: (provided, state) => ({
+      ...provided,
+      background: '#323437',
+      width: "200px",
+      boxShadow: 0,
+      borderColor: state.isFocused
+        ? '#e2b714' : '#d1d0c5',
+      '&:hover': {
+        borderColor: state.isFocused
+          ? '#e2b714' : '#d1d0c5',
+      }
+    }),
+    singleValue: (provided, state) => {
+      const opacity = state.isDisabled ? 0.5 : 1;
+      const transition = 'opacity 300ms';
+  
+      return { ...provided, opacity, transition, color: '#e2b714' };
+    }
+  }
 
   return (
     <>
-      <h1>MonkeyCode</h1>
+      <h1>MonkeyCode 🍌</h1>
 
       <h2>{currTitle}</h2>
+
+      <Select 
+        value = { currLanguage }
+        options = { languageOptions }
+        onChange = { setCurrLanguage }
+        isSearchable = { false }
+        styles = { customStyles }
+      />
 
       {/* Map list of lines out to individual characters */}
 
@@ -175,11 +222,15 @@ for (let i = 0; i < currProblem.length; i++) {
           )
         })}
       </div>
-      <h2>{victory}</h2>
-      {victory
-        ? <div>
-          <h3>Speed: {totalChars / 5 / currTime * 60} WPM</h3>
-          <h3>Accuracy: {Math.round((totalChars - mistakes) / totalChars * 10000) / 100} %</h3></div>
+      {victory ?
+        <>
+          <div className="results-cover" />
+          <div className="results">
+            <h2>{victory}</h2>
+            <h3>Speed: {Math.round(totalChars / 5 / currTime * 60)} WPM</h3>
+            <h3>Accuracy: {Math.round((totalChars - mistakes) / totalChars * 10000) / 100} %</h3>
+          </div>
+        </>
         : null}
     </>
   )
