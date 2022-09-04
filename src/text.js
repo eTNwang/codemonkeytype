@@ -1,0 +1,331 @@
+const text = `1-Two-Sum.py 
+class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        prevMap = {}  # val -> index
+
+        for i, n in enumerate(nums):
+            diff = target - n
+            if diff in prevMap:
+                return [prevMap[diff], i]
+            prevMap[n] = i
+####20-Valid-Parentheses.py
+class Solution:
+    def isValid(self, s: str) -> bool:
+        Map = {")": "(", "]": "[", "}": "{"}
+        stack = []
+
+        for c in s:
+            if c not in Map:
+                stack.append(c)
+                continue
+            if not stack or stack[-1] != Map[c]:
+                return False
+            stack.pop()
+
+        return not stack
+####21-Merge-Two-Sorted-Lists.py
+class Solution:
+    def mergeTwoLists(self, list1: ListNode, list2: ListNode) -> ListNode:
+        dummy = ListNode()
+        tail = dummy
+
+        while list1 and list2:
+            if list1.val < list2.val:
+                tail.next = list1
+                list1 = list1.next
+            else:
+                tail.next = list2
+                list2 = list2.next
+            tail = tail.next
+
+        if list1:
+            tail.next = list1
+        elif list2:
+            tail.next = list2
+
+        return dummy.next
+####121-Best-Time-To-Buy-and-Sell-Stock.py
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        res = 0
+
+        l = 0
+        for r in range(1, len(prices)):
+            if prices[r] < prices[l]:
+                l = r
+            res = max(res, prices[r] - prices[l])
+        return res
+####125-Valid-Palindrome.py
+class Solution:
+    def isPalindrome(self, s: str) -> bool:
+        l, r = 0, len(s) - 1
+        while l < r:
+            while l < r and not self.alphanum(s[l]):
+                l += 1
+            while l < r and not self.alphanum(s[r]):
+                r -= 1
+            if s[l].lower() != s[r].lower():
+                return False
+            l += 1
+            r -= 1
+        return True
+
+    # Could write own alpha-numeric function
+    def alphanum(self, c):
+        return (
+            ord("A") <= ord(c) <= ord("Z")
+            or ord("a") <= ord(c) <= ord("z")
+            or ord("0") <= ord(c) <= ord("9")
+        )
+####226-Invert-Binary-Tree.py
+class Solution:
+    def invertTree(self, root: TreeNode) -> TreeNode:
+        if not root:
+            return None
+
+        # swap the children
+        tmp = root.left
+        root.left = root.right
+        root.right = tmp
+
+        self.invertTree(root.left)
+        self.invertTree(root.right)
+        return root
+####242-Valid-Anagrams.py
+class Solution:
+    def isAnagram(self, s: str, t: str) -> bool:
+        if len(s) != len(t):
+            return False
+
+        countS, countT = {}, {}
+
+        for i in range(len(s)):
+            countS[s[i]] = 1 + countS.get(s[i], 0)
+            countT[t[i]] = 1 + countT.get(t[i], 0)
+        return countS == countT
+####704-Binary-Search.py
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+        l, r = 0, len(nums) - 1
+
+        while l <= r:
+            m = l + ((r - l) // 2)  # (l + r) // 2 can lead to overflow
+            if nums[m] > target:
+                r = m - 1
+            elif nums[m] < target:
+                l = m + 1
+            else:
+                return m
+        return -1
+####53-Maximum-Subarray.py
+class Solution:
+    def maxSubArray(self, nums: List[int]) -> int:
+        res = nums[0]
+
+        total = 0
+        for n in nums:
+            total += n
+            res = max(res, total)
+            if total < 0:
+                total = 0
+        return res
+####236-Lowest-Common-Ancestor-of-a-Binary-Tree.py
+class Solution:
+    res = None
+
+    def lowestCommonAncestor(
+        self, root: "TreeNode", p: "TreeNode", q: "TreeNode"
+    ) -> "TreeNode":
+        if not root or not p or not q:
+            return None
+
+        def search(root, p, q):
+            if not root:
+                return False
+            mid = left = right = False
+            if root.val == p.val or root.val == q.val:
+                mid = True
+
+            left = search(root.left, p, q)
+            right = search(root.right, p, q)
+            if mid:
+                if left or right:
+                    self.res = root
+            elif left and right:
+                self.res = root
+            return mid or left or right
+
+        search(root, p, q)
+        return self.res
+####110-Balanced-Binary-Tree.py
+class Solution:
+    def isBalanced(self, root: Optional[TreeNode]) -> bool:
+        def dfs(root):
+            if not root:
+                return [True, 0]
+
+            left, right = dfs(root.left), dfs(root.right)
+            balanced = left[0] and right[0] and abs(left[1] - right[1]) <= 1
+            return [balanced, 1 + max(left[1], right[1])]
+
+        return dfs(root)[0]
+####141-Linked-List-Cycle.py
+class Solution:
+    def hasCycle(self, head: ListNode) -> bool:
+        slow, fast = head, head
+
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+            if slow == fast:
+                return True
+        return False
+####70-Climbing-Stairs.py
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        if n <= 3:
+            return n
+        n1, n2 = 2, 3
+
+        for i in range(4, n + 1):
+            temp = n1 + n2
+            n1 = n2
+            n2 = temp
+        return n2
+####5-Longest-Palindromic-Substring.py
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        res = ""
+        resLen = 0
+
+        for i in range(len(s)):
+            # odd length
+            l, r = i, i
+            while l >= 0 and r < len(s) and s[l] == s[r]:
+                if (r - l + 1) > resLen:
+                    res = s[l : r + 1]
+                    resLen = r - l + 1
+                l -= 1
+                r += 1
+
+            # even length
+            l, r = i, i + 1
+            while l >= 0 and r < len(s) and s[l] == s[r]:
+                if (r - l + 1) > resLen:
+                    res = s[l : r + 1]
+                    resLen = r - l + 1
+                l -= 1
+                r += 1
+
+        return res
+####206-Reverse-Linked-List.py
+class Solution:
+    def reverseList(self, head: ListNode) -> ListNode:
+        prev, curr = None, head
+
+        while curr:
+            temp = curr.next
+            curr.next = prev
+            prev = curr
+            curr = temp
+        return prev
+####206-Reverse-Linked-List.py
+class Solution:
+    def reverseList(self, head: ListNode) -> ListNode:
+        prev, curr = None, head
+
+        while curr:
+            temp = curr.next
+            curr.next = prev
+            prev = curr
+            curr = temp
+        return prev
+####543-Diameter-of-Binary-Tree.py
+class Solution:
+    def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
+        res = 0
+
+        def dfs(root):
+            nonlocal res
+
+            if not root:
+                return 0
+            left = dfs(root.left)
+            right = dfs(root.right)
+            res = max(res, left + right)
+
+            return 1 + max(left, right)
+
+        dfs(root)
+        return res
+####658-Find-K-Closest-Elements.py
+# Log(n) + k
+# More code but also more intuitive
+class Solution:
+    def findClosestElements(self, arr: List[int], k: int, x: int) -> List[int]:
+        l, r = 0, len(arr) - 1
+
+        # Find index of x or the closest val to x
+        val, idx = arr[0], 0
+        while l <= r:
+            m = (l + r) // 2
+            curDiff, resDiff = abs(arr[m] - x), abs(val - x)
+            if curDiff < resDiff or (curDiff == resDiff and arr[m] < val):
+                val, idx = arr[m], m
+
+            if arr[m] < x:
+                l = m + 1
+            elif arr[m] > x:
+                r = m - 1
+            else:
+                break
+
+        l = r = idx
+        for i in range(k - 1):
+            if l == 0:
+                r += 1
+            elif r == len(arr) - 1 or x - arr[l - 1] <= arr[r + 1] - x:
+                l -= 1
+            else:
+                r += 1
+        return arr[l : r + 1]
+
+
+# Log(n-k) + k
+# Elegant but very difficult to understand
+class Solution:
+    def findClosestElements(self, arr: List[int], k: int, x: int) -> List[int]:
+        l, r = 0, len(arr) - k
+
+        while l < r:
+            m = (l + r) // 2
+            if x - arr[m] > arr[m + k] - x:
+                l = m + 1
+            else:
+                r = m
+        return arr[l : l + k]
+####15-3Sum.py
+class Solution:
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        res = []
+        nums.sort()
+
+        for i, a in enumerate(nums):
+            if i > 0 and a == nums[i - 1]:
+                continue
+
+            l, r = i + 1, len(nums) - 1
+            while l < r:
+                threeSum = a + nums[l] + nums[r]
+                if threeSum > 0:
+                    r -= 1
+                elif threeSum < 0:
+                    l += 1
+                else:
+                    res.append([a, nums[l], nums[r]])
+                    l += 1
+                    while nums[l] == nums[l - 1] and l < r:
+                        l += 1
+        return res`
+
+export default text;

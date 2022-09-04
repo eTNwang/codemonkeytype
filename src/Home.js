@@ -1,18 +1,13 @@
 import React, { useState, useEffect } from "react"
-
 import useKeyPress from "./hooks/useKeyPress"
+import text from "./text.js";
 
-
-
-const {readFileSync, promises: fsPromises} = require('fs');
-
-function syncReadFile(filename) {
-
-  const contents = readFileSync(filename, 'utf-8');
+function syncReadFile() {
 
   var problems = []
 
-  const arr = contents.split("####");
+
+  const arr = text.split("####");
   function addtoproblems(input){
     var inputarr = input.split(/\r?\n/)
     let title = inputarr.shift();
@@ -24,30 +19,18 @@ function syncReadFile(filename) {
 
   }
   arr.forEach((x, i) => addtoproblems(x));
+  console.log(problems)
+  
   return problems;
 }
 
 
 // Each solution is stored as an array of strings, with each string representing one line of the solution
-const lineList = ["prevMap = {}", "for i, n in enumerate(nums):", "if diff in prevMap:", "return [prevMap[diff], i]", "prevMap[n] = i"]
-const problemTitle = "TwoSum"
 
-const initialState = []
-
-for (let i = 0; i < lineList.length; i++) {
-  initialState.push([])
-}
-
-let totalChars = 0
-
-for (let i = 0; i < lineList.length; i++) {
-  for (let j = 0; j < lineList[i].length; j++) {
-    totalChars++
-  }
-}
 
 const Home = () => {
-  // Store an array of booleans depending on if the character was typed correctly
+
+  let initialState = []
   const [isCharacterCorrect, setIsCharacterCorrect] = useState(initialState)
   const [mistakes, setMistakes] = useState(0)
   const [victory, setVictory] = useState("")
@@ -55,8 +38,23 @@ const Home = () => {
   const [currCharIndex, setCurrCharIndex] = useState(0)
   const [currTime, setTime] = useState(0)
   const [ticking, setTicking] = useState(false)
+  const [currProblem, setProblem] = useState(syncReadFile())
+  const [currTitle, setTitle] = useState(currProblem[0].name)
+  const [currText, setText] = useState(currProblem[0].text)
 
 
+for (let i = 0; i < currProblem.length; i++) {
+  initialState.push([])
+}
+
+let totalChars = 0
+
+for (let i = 0; i < currProblem.length; i++) {
+  for (let j = 0; j < currProblem[i].length; j++) {
+    totalChars++
+  }
+}
+  
 
   useEffect(() => {
     const timer = setTimeout(() => ticking && setTime(currTime + 1), 1000)
@@ -75,7 +73,7 @@ const Home = () => {
 
     setTicking(true)
 
-    if (currLineIndex >= lineList.length) {
+    if (currLineIndex >= currText.length) {
       return
     }
 
@@ -90,7 +88,7 @@ const Home = () => {
       // Decrement line if first char
       if (currCharIndex === 0) {
         setCurrLineIndex(currLineIndex - 1)
-        setCurrCharIndex(lineList[currLineIndex - 1].length - 1)
+        setCurrCharIndex(currText[currLineIndex - 1].length - 1)
         setIsCharacterCorrect(isCharacterCorrect.map(
           (line, index) => index === currLineIndex - 1 ? line.slice(0, -1) : line))
       } else {
@@ -99,7 +97,7 @@ const Home = () => {
 
       // Valid key handler
     } else {
-      if (key === lineList[currLineIndex][currCharIndex]) {
+      if (key === currText[currLineIndex][currCharIndex]) {
         setIsCharacterCorrect(isCharacterCorrect.map(
           (line, index) => index === currLineIndex ? line.concat(true) : line)
         )
@@ -111,12 +109,19 @@ const Home = () => {
       }
 
       // Increment line if last char
-      if (currCharIndex === lineList[currLineIndex].length - 1) {
+      if (currCharIndex === currText[currLineIndex].length - 1) {
 
         // Win condition
-        if (currLineIndex >= lineList.length - 1) {
+        if (currLineIndex >= currText.length - 1) {
           setVictory("Victory!")
           setCurrLineIndex(999)
+          
+          setProblem(currProblem.shift())
+
+          setTimeout(function() {
+            setText(currProblem[0].text)
+            setTitle(currProblem[0].name)
+          }, 2000);
 
           // Haven't won yet condition
         } else {
@@ -133,13 +138,13 @@ const Home = () => {
     <>
       <h1>MonkeyCode</h1>
 
-      <h2>{problemTitle}</h2>
+      <h2>{currTitle}</h2>
 
       {/* Map list of lines out to individual characters */}
 
       <p className="timer">{currTime}</p>
       <div className="test">
-        {lineList.map((line, lineIndex) => {
+        {currText.map((line, lineIndex) => {
           return (
             <div key={lineIndex}>
               {line.split("").map((char, charIndex) => {
